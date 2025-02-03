@@ -3,17 +3,23 @@
 export default $config({
   app(input) {
     return {
-      name: "monorepo-template",
+      name: "gamify",
       removal: input?.stage === "production" ? "retain" : "remove",
+      providers: {
+        aws: {
+          profile: 'gamify',
+        }
+      },
       home: "aws",
     };
   },
   async run() {
-    await import("./infra/storage");
-    const api = await import("./infra/api");
+    await import("./infrastructure/storage");
+    await import("./infrastructure/database");
+    const api = await import("./infrastructure/api");
 
     return {
-      api: api.myApi.url,
+      api: api.Api.url,
     };
   },
 });
